@@ -11,12 +11,6 @@ using namespace std;
 using namespace std::views;
 using namespace std::ranges;
 
-void print(auto const rem, auto const& r) {
-    for (std::cout << rem; auto const& e : r)
-        std::cout << e << ' ';
-    std::cout << '\n';
-}
-
 void print_chunks(auto view, std::string_view separator = " ")
 {
     for (auto const subrange : view)
@@ -43,7 +37,10 @@ int main()
         }
     }
 
-    auto sum = views::zip_transform([](auto a, auto b) { return abs(a-b) <= 1 ? 'X' : ' '; }, views::repeat(iota(0, 40), 6) | views::join , instructions) | chunk(40);
+    auto sum = views::zip_transform([](auto a, auto b) { return abs(a-b) <= 1 ? 'X' : ' '; },
+    views::repeat(iota(0, 40), 6) 
+    | views::join , instructions) 
+    | chunk(40);
 
     print_chunks( sum);
     return 0;
