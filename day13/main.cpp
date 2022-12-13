@@ -14,7 +14,7 @@
 using namespace std;
 
 constexpr string symbols = "0123456789[],";
-bool compare(string left, string right)
+bool compare(const string& left, const string& right)
 {
     for (string::size_type leftPos = left.find_first_of(symbols), rightPos = right.find_first_of(symbols);
          leftPos != string::npos && rightPos != string::npos;
