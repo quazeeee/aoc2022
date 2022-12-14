@@ -15,7 +15,7 @@
 using namespace std;
 
 constexpr string symbols = "0123456789[],";
-bool compare(const string& left, const string& right)
+bool compare(const string &left, const string &right)
 {
     for (string::size_type leftPos = left.find_first_of(symbols), rightPos = right.find_first_of(symbols);
          leftPos != string::npos && rightPos != string::npos;
@@ -58,17 +58,14 @@ bool compare(const string& left, const string& right)
     return true;
 }
 
-int findDecoderKey(vector<string>& packets)
+int findDecoderKey(vector<string> &packets)
 {
+
+    int count = std::accumulate(packets.begin(), packets.end(), 0, [](int count, const string &code)
+                        { return compare(code, "[[2]]") ? count +1 : count; });
     
-    std::sort(packets.begin(), packets.end(),[](const string& lhs,const string& rhs){
-        return compare(lhs, rhs);
-    });
-
-    auto it1 = std::find(packets.begin(), packets.end(), "[[2]]");
-    auto it2 = std::find(packets.begin(), packets.end(), "[[6]]");
-
-    return (std::distance(packets.begin(), it1) + 1) * (std::distance(packets.begin(), it2) + 1);
+    return count * (std::accumulate(packets.begin(), packets.end(), 0, [](int count, const string &code)
+                        { return compare(code, "[[6]]") ? count +1 : count; }));
 }
 
 int main()
