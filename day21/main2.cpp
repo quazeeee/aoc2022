@@ -1,19 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <algorithm>
-#include <functional>
+#include <vector>
 #include <ranges>
-#include <limits.h>
-#include <optional>
-#include <map>
-#include <set>
+#include <functional>
+#include <unordered_map>
 #include <string>
 #include <cstdint>
-#include <sstream>
-#include <list>
 #include <numeric>
-#include <memory>
 
 using namespace std;
 
@@ -35,19 +29,9 @@ unordered_map<char, std::function<int64_t(int64_t, int64_t)>> ops = {
     {'=', [](int64_t a, int64_t b)
      { return static_cast<int64_t>(a == b); }}};
 
-unordered_map<char, char> inverse_op_left = {
-    {'/', '*'},
-    {'+', '-'},
-    {'-', '+'},
-    {'=', '!'},
-    {'*', '/'}};
+unordered_map<char, char> inverse_op_left = {{'/', '*'}, {'+', '-'}, {'-', '+'}, {'=', '!'}, {'*', '/'}};
 
-unordered_map<char, char> inverse_op_right = {
-    {'/', '#'}, // args inversed
-    {'+', '-'},
-    {'=', '!'},
-    {'-', '$'}, // args inversed
-    {'*', '/'}};
+unordered_map<char, char> inverse_op_right = {{'/', '#'}, {'+', '-'}, {'=', '!'}, {'-', '$'}, {'*', '/'}};
 
 struct Monkey
 {
@@ -65,12 +49,11 @@ int64_t foo(const vector<string> &lines)
     for (int64_t i = 0; i < lines.size(); ++i)
     {
         Monkey monkey;
-        string mName = lines[i].substr(0, 4);
-        monkey.name = mName;
+        monkey.name = lines[i].substr(0, 4);
         if (isdigit(lines[i][6]))
         {
             monkey.number = stoi(lines[i].substr(6));
-            if (mName == "humn")
+            if (monkey.name == "humn")
             {
                 monkey.reverse = true;
             }
@@ -80,15 +63,13 @@ int64_t foo(const vector<string> &lines)
             monkey.deps.push_back(lines[i].substr(6, 4));
             monkey.deps.push_back(lines[i].substr(13));
             monkey.op = lines[i][11];
-            if (mName == "root")
+            if (monkey.name == "root")
             {
                 monkey.op = '=';
             }
         }
-        monkeys.insert({mName, monkey});
+        monkeys.insert({monkey.name, monkey});
     }
-
-    int64_t postOrderNum = 0;
 
     std::function<void(Monkey &)> dfs;
     dfs = [&](Monkey &mk) -> void
@@ -149,7 +130,6 @@ int main()
     {
         lines.emplace_back(line);
     }
-
     cout << foo(lines);
 
     return 0;
